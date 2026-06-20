@@ -48,7 +48,9 @@ export function startWebServer(config: ZszCodeConfig): WebServerHandle {
   let server: ReturnType<typeof Bun.serve>
   const wsClients = new Set<any>()
   const pendingPermissions = new Map<string, { resolve: (d: string) => void; timer: ReturnType<typeof setTimeout> }>()
-  const webDist = join(process.cwd(), 'web', 'dist')
+  // Resolve web/dist relative to project root
+  const projectRoot = join(import.meta.dir, '..', '..')
+  const webDist = join(projectRoot, 'web', 'dist')
 
   const startPort = config.webPort === 0 ? 0 : config.webPort
   const maxAttempts = config.webPort === 0 ? 1 : MAX_PORT_ATTEMPTS
@@ -133,7 +135,34 @@ export function startWebServer(config: ZszCodeConfig): WebServerHandle {
           close(ws) {
             wsClients.delete(ws)
           },
-          message() {},
+          message(ws, message) {
+            try {
+              const data = JSON.parse(typeof message === 'string' ? message : message.toString())
+              // Handle user messages from Web UI
+              if ((data.type === 'user_message' || data.type === 'send') && data.content) {
+                // Emit message event so CLI can pick it up
+                eventBus.emit({
+                  type: 'message',
+                  timestamp: Date.now(),
+                  role: 'user',
+                  content: data.content,
+                })
+                // Queue message for agent loop
+                eventBus.enqueueMessage(data.content)
+              }
+              // Handle permission responses
+              if (data.type === 'permission_response' && data.toolUseId) {
+                const pending = pendingPermissions.get(data.toolUseId)
+                if (pending) {
+                  clearTimeout(pending.timer)
+                  pending.resolve(data.decision || 'deny')
+                  pendingPermissions.delete(data.toolUseId)
+                }
+              }
+            } catch {
+              // Ignore malformed messages
+            }
+          },
         },
       })
 

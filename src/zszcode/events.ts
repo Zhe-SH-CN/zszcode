@@ -26,6 +26,17 @@ const MAX_HISTORY = 1000
 
 export class ZszCodeEventBus extends EventEmitter {
   private history: ZszCodeEvent[] = []
+  private messageQueue: string[] = []
+
+  // Web UI sends messages here; agent loop picks them up
+  enqueueMessage(content: string): void {
+    this.messageQueue.push(content)
+  }
+
+  // Called by agent loop to get next message from Web UI
+  dequeueMessage(): string | undefined {
+    return this.messageQueue.shift()
+  }
 
   emit(event: ZszCodeEvent): boolean {
     this.history.push(event)

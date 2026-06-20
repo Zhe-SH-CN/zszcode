@@ -33,6 +33,8 @@ import { init, initializeTelemetryAfterTrust } from './entrypoints/init.js';
 import { addToHistory } from './history.js';
 import type { Root } from './ink.js';
 import { launchRepl } from './replLauncher.js';
+import { startWebServer } from './zszcode/server.js';
+import { loadConfig } from './zszcode/config.js';
 import { hasGrowthBookEnvOverride, initializeGrowthBook, refreshGrowthBookAfterAuthChange } from './services/analytics/growthbook.js';
 import { fetchBootstrapData } from './services/api/bootstrap.js';
 import { type DownloadResult, downloadSessionFiles, type FilesApiConfig, parseFileSpecs } from './services/api/filesApi.js';
@@ -606,6 +608,16 @@ export async function main() {
     }
     process.exit(0);
   });
+
+  // Start Web server for UI observability
+  try {
+    const zszConfig = loadConfig();
+    const webHandle = startWebServer(zszConfig);
+    console.log(`\nWeb UI: ${webHandle.url}\n`);
+  } catch (err) {
+    console.error('Failed to start Web server:', err);
+  }
+
   profileCheckpoint('main_warning_handler_initialized');
 
   // Check for cc:// or cc+unix:// URL in argv — rewrite so the main command

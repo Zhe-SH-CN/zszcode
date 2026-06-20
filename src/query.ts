@@ -310,8 +310,8 @@ async function* queryLoop(
     // is reassigned within an iteration (queryTracking, messages updates);
     // the rest are read-only between continue sites.
     let { toolUseContext } = state
+    let { messages } = state
     const {
-      messages,
       autoCompactTracking,
       maxOutputTokensRecoveryCount,
       hasAttemptedReactiveCompact,
@@ -320,6 +320,19 @@ async function* queryLoop(
       stopHookActive,
       turnCount,
     } = state
+
+    // Check for messages from Web UI (non-blocking)
+    const webMsg = eventBus.dequeueMessage()
+    if (webMsg) {
+      messages = [...messages, { role: 'user', content: webMsg } as any]
+      // Emit message event for Web UI to display
+      eventBus.emit({
+        type: 'message',
+        timestamp: Date.now(),
+        role: 'user',
+        content: webMsg,
+      })
+    }
 
     // Emit turn_start event for observability
     eventBus.emit({ type: 'turn_start', timestamp: Date.now(), turnNumber: turnCount })

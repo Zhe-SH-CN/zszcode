@@ -2,9 +2,11 @@ import {
   ContinuousEventPriority,
   DefaultEventPriority,
   DiscreteEventPriority,
-  NoEventPriority,
 } from 'react-reconciler/constants.js'
 import { logError } from '../../utils/log.js'
+
+// NoEventPriority not available in this version, use a constant
+const NoEventPriority = 0
 import { HANDLER_FOR_EVENT } from './event-handlers.js'
 import type { EventTarget, TerminalEvent } from './terminal-event.js'
 
