@@ -1,4 +1,5 @@
 // biome-ignore-all assist/source/organizeImports: ANT-ONLY import markers must not be reordered
+import { eventBus } from './zszcode/events.js'
 import type {
   ToolResultBlockParam,
   ToolUseBlock,
@@ -319,6 +320,9 @@ async function* queryLoop(
       stopHookActive,
       turnCount,
     } = state
+
+    // Emit turn_start event for observability
+    eventBus.emit({ type: 'turn_start', timestamp: Date.now(), turnNumber: turnCount })
 
     // Skill discovery prefetch — per-iteration (uses findWritePivot guard
     // that returns early on non-write iterations). Discovery runs while the
@@ -656,6 +660,7 @@ async function* queryLoop(
         try {
           let streamingFallbackOccured = false
           queryCheckpoint('query_api_streaming_start')
+          eventBus.emit({ type: 'api_stream_start', timestamp: Date.now(), model: params.model ?? '' })
           for await (const message of deps.callModel({
             messages: prependUserContext(messagesForQuery, userContext),
             systemPrompt: fullSystemPrompt,
@@ -862,6 +867,7 @@ async function* queryLoop(
             }
           }
           queryCheckpoint('query_api_streaming_end')
+          eventBus.emit({ type: 'api_stream_end', timestamp: Date.now(), duration: 0, tokens: 0 })
 
           // Yield deferred microcompact boundary message using actual API-reported
           // token deletion count instead of client-side estimates.
@@ -1724,6 +1730,8 @@ async function* queryLoop(
       stopHookActive,
       transition: { reason: 'next_turn' },
     }
+    // Emit turn_end event for observability
+    eventBus.emit({ type: 'turn_end', timestamp: Date.now(), turnNumber: turnCount })
     state = next
   } // while (true)
 }
