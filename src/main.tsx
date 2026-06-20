@@ -279,7 +279,7 @@ if ("external" !== 'ant' && isBeingDebugged()) {
  */
 function logSessionTelemetry(): void {
   const zszConfig = loadConfig()
-  const model = parseUserSpecifiedModel(getInitialMainLoopModel() ?? zszConfig.model || getDefaultMainLoopModel());
+  const model = parseUserSpecifiedModel(getInitialMainLoopModel() ?? (zszConfig.model || getDefaultMainLoopModel()));
   void logSkillsLoaded(getCwd(), getContextWindowForModel(model, getSdkBetas()));
   void loadAllPluginsCacheOnly().then(({
     enabled,
