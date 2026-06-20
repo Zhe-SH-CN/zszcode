@@ -1,4 +1,5 @@
 import { feature } from 'bun:bundle'
+import { eventBus } from '../../zszcode/events.js'
 import type {
   ContentBlockParam,
   ToolResultBlockParam,
@@ -1204,6 +1205,15 @@ async function checkPermissionsAndCallTool(
     callInput = processedInput
   }
   try {
+    // Emit tool_call_start event for observability
+    eventBus.emit({
+      type: 'tool_call_start',
+      timestamp: Date.now(),
+      toolName: toolName,
+      toolUseId: toolUseID,
+      input: callInput,
+      agentId: toolUseContext.options.agentId ?? 'main',
+    })
     const result = await tool.call(
       callInput,
       {
@@ -1222,6 +1232,17 @@ async function checkPermissionsAndCallTool(
     )
     const durationMs = Date.now() - startTime
     addToToolDuration(durationMs)
+
+    // Emit tool_call_end event for observability
+    eventBus.emit({
+      type: 'tool_call_end',
+      timestamp: Date.now(),
+      toolName: toolName,
+      toolUseId: toolUseID,
+      success: true,
+      duration: durationMs,
+      output: result.data,
+    })
 
     // Log tool content/output as span event if enabled
     if (result.data && typeof result.data === 'object') {
@@ -1589,6 +1610,16 @@ async function checkPermissionsAndCallTool(
   } catch (error) {
     const durationMs = Date.now() - startTime
     addToToolDuration(durationMs)
+
+    // Emit tool_call_end event with failure for observability
+    eventBus.emit({
+      type: 'tool_call_end',
+      timestamp: Date.now(),
+      toolName: toolName,
+      toolUseId: toolUseID,
+      success: false,
+      duration: durationMs,
+    })
 
     endToolExecutionSpan({
       success: false,
