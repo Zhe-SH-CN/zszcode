@@ -25,11 +25,11 @@ describe('task 172-175: ToolResultBlock component', () => {
   })
 
   test('success green border', () => {
-    expect(content).toContain('border-green-500')
+    expect(content).toContain('border-accent-emerald')
   })
 
   test('failed red border', () => {
-    expect(content).toContain('border-red-500')
+    expect(content).toContain('border-accent-rose')
   })
 
   test('shows more lines count', () => {

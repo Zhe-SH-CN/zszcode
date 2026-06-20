@@ -34,6 +34,6 @@ describe('task 155: ContextGauge component', () => {
 
   test('progress bar red at 80%', () => {
     expect(content).toContain('pct >= 80')
-    expect(content).toContain('bg-red-500')
+    expect(content).toContain('accent-rose')
   })
 })

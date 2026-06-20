@@ -20,17 +20,17 @@ describe('task 170-171: ToolUseBlock component', () => {
   })
 
   test('shows tool name bold', () => {
-    expect(content).toContain('font-bold')
+    expect(content).toContain('font-semibold')
     expect(content).toContain('toolName')
   })
 
   test('has blue left border', () => {
-    expect(content).toContain('border-l-4 border-blue-500')
+    expect(content).toContain('border-l-4 border-accent-blue')
   })
 
   test('input collapsible', () => {
     expect(content).toContain('Show input')
-    expect(content).toContain('Hide input')
+    expect(content).toContain('Hide')
   })
 
   test('JSON formatted with stringify', () => {

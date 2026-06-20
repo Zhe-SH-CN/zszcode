@@ -15,10 +15,11 @@ describe('task 163: Tailwind dark theme config', () => {
     expect(content).toContain('./src/**/*.{ts,tsx}')
   })
 
-  test('has custom surface color', () => {
+  test('has custom bg colors', () => {
     const content = readFileSync(join(WEB, 'tailwind.config.js'), 'utf-8')
-    expect(content).toContain('surface')
-    expect(content).toContain('#1a1a2e')
+    expect(content).toContain('bg')
+    expect(content).toContain('primary')
+    expect(content).toContain('#0a0e1a')
   })
 
   test('index.css has Tailwind directives', () => {

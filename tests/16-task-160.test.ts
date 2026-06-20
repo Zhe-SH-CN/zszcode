@@ -26,6 +26,6 @@ describe('task 160: Tab switching', () => {
   })
 
   test('active tab has highlight style', () => {
-    expect(content).toContain('border-b-2 border-blue-500')
+    expect(content).toContain('border-b-2 border-accent-blue')
   })
 })
