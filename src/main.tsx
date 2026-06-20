@@ -114,6 +114,7 @@ import { findGitRoot, getBranch, getIsGit, getWorktreeCount } from './utils/git.
 import { getGhAuthStatus } from './utils/github/ghAuthStatus.js';
 import { safeParseJSON } from './utils/json.js';
 import { logError } from './utils/log.js';
+import { loadConfig } from './zszcode/config.js';
 import { getModelDeprecationWarning } from './utils/model/deprecation.js';
 import { getDefaultMainLoopModel, getUserSpecifiedModelSetting, normalizeModelStringForAPI, parseUserSpecifiedModel } from './utils/model/model.js';
 import { ensureModelStringsInitialized } from './utils/model/modelStrings.js';
@@ -277,7 +278,8 @@ if ("external" !== 'ant' && isBeingDebugged()) {
  * call sites here rather than one here + one in QueryEngine.
  */
 function logSessionTelemetry(): void {
-  const model = parseUserSpecifiedModel(getInitialMainLoopModel() ?? getDefaultMainLoopModel());
+  const zszConfig = loadConfig()
+  const model = parseUserSpecifiedModel(getInitialMainLoopModel() ?? zszConfig.model || getDefaultMainLoopModel());
   void logSkillsLoaded(getCwd(), getContextWindowForModel(model, getSdkBetas()));
   void loadAllPluginsCacheOnly().then(({
     enabled,
