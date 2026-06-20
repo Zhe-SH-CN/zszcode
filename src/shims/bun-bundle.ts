@@ -13,3 +13,7 @@ export const MACRO = {
   VERSION_CHANGELOG: '',
   ISSUES_EXPLAINER: 'Report issues at https://github.com/Zhe-SH-CN/zszcode/issues',
 }
+
+// Make MACRO globally available (used as bare global in 138+ files)
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+;(globalThis as any).MACRO ??= MACRO
