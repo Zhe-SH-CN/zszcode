@@ -172,7 +172,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div data-testid="app" className="h-screen flex flex-col bg-gray-900 text-white">
+    <div data-testid="app" className="h-screen flex flex-col bg-bg-primary text-text-primary">
       {/* Top bar */}
       <ContextGauge
         tokenCount={0}
@@ -195,16 +195,16 @@ export const App: React.FC = () => {
         {/* Content area */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Tabs */}
-          <div className="flex border-b border-gray-700 bg-gray-800">
+          <div className="flex border-b border-border-subtle bg-bg-secondary/50 backdrop-blur-sm">
             {(['chat', 'workflow', 'signals'] as Tab[]).map((tab) => (
               <button
                 key={tab}
                 data-testid={`tab-${tab}`}
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 text-sm font-medium capitalize transition-colors ${
+                className={`px-6 py-3 text-sm font-medium capitalize transition-all duration-300 ${
                   activeTab === tab
-                    ? 'text-white border-b-2 border-blue-500'
-                    : 'text-gray-400 hover:text-gray-200'
+                    ? 'text-text-primary border-b-2 border-accent-blue bg-bg-card/50'
+                    : 'text-text-secondary hover:text-text-primary hover:bg-bg-hover/50'
                 }`}
               >
                 {tab}

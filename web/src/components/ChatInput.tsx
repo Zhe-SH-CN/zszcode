@@ -38,30 +38,50 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   return (
     <div
       data-testid="chat-input-container"
-      className="border-t border-gray-700 bg-gray-800 p-3 flex items-end gap-2"
+      className="border-t border-border-subtle bg-bg-secondary/80 backdrop-blur-sm p-4"
     >
       {disabled ? (
-        <div className="flex-1 text-sm text-gray-400 py-2">Thinking...</div>
+        <div className="flex items-center gap-3 px-4 py-3">
+          <div className="w-2 h-2 rounded-full bg-accent-amber animate-pulse" />
+          <span className="text-text-secondary text-sm">Thinking...</span>
+        </div>
       ) : (
-        <textarea
-          ref={textareaRef}
-          data-testid="chat-input"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Type a message..."
-          rows={1}
-          className="flex-1 bg-gray-900 text-gray-100 border border-gray-600 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:border-blue-500 font-sans"
-        />
+        <div className="flex items-end gap-3">
+          <div className="flex-1 relative">
+            <textarea
+              ref={textareaRef}
+              data-testid="chat-input"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Type a message..."
+              rows={1}
+              className="w-full px-4 py-3 bg-bg-card text-text-primary
+                         border border-border-subtle rounded-xl
+                         resize-none focus:outline-none
+                         focus:border-accent-blue focus:ring-2 focus:ring-accent-blue/20
+                         placeholder:text-text-muted
+                         transition-all duration-300"
+            />
+            <div className="absolute right-3 bottom-3 text-xs text-text-muted">
+              {text.length > 0 && <span>{text.length}</span>}
+            </div>
+          </div>
+          <button
+            data-testid="send-button"
+            onClick={handleSend}
+            disabled={disabled || !text.trim()}
+            className="px-6 py-3 bg-gradient-to-r from-accent-blue to-accent-purple
+                       text-white font-medium rounded-xl
+                       transition-all duration-300
+                       hover:shadow-glow-blue hover:scale-[1.02]
+                       active:scale-[0.98]
+                       disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          >
+            Send
+          </button>
+        </div>
       )}
-      <button
-        data-testid="send-button"
-        onClick={handleSend}
-        disabled={disabled || !text.trim()}
-        className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
-      >
-        Send
-      </button>
     </div>
   )
 }

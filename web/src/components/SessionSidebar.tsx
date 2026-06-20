@@ -17,15 +17,17 @@ export const SessionSidebar: React.FC<SessionSidebarProps> = ({
   return (
     <div
       data-testid="session-sidebar"
-      className="w-60 flex-shrink-0 bg-gray-900 border-r border-gray-700 flex flex-col h-full"
+      className="w-64 flex-shrink-0 bg-bg-secondary/50 border-r border-border-subtle flex flex-col h-full backdrop-blur-sm"
     >
-      <div className="p-3 border-b border-gray-700">
-        <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wider">
+      {/* Header */}
+      <div className="p-4 border-b border-border-subtle">
+        <h2 className="text-xs font-semibold text-text-muted uppercase tracking-wider">
           Sessions
         </h2>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      {/* Session list */}
+      <div className="flex-1 overflow-y-auto p-2 space-y-1">
         {sessions.map((s) => (
           <button
             key={s.id}
@@ -37,24 +39,35 @@ export const SessionSidebar: React.FC<SessionSidebarProps> = ({
               if (e.key === 'Enter' && s.id !== activeSessionId)
                 onSwitchSession(s.id)
             }}
-            className={`w-full text-left px-3 py-2 text-sm transition-colors ${
+            className={`w-full text-left px-3 py-2.5 text-sm rounded-lg transition-all duration-200 ${
               s.id === activeSessionId
-                ? 'bg-gray-700 text-white'
-                : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
+                ? 'bg-accent-blue/20 text-text-primary border border-accent-blue/30'
+                : 'text-text-secondary hover:bg-bg-hover hover:text-text-primary border border-transparent'
             }`}
           >
-            {s.name}
+            <div className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${
+                s.id === activeSessionId ? 'bg-accent-blue' : 'bg-text-muted'
+              }`} />
+              <span className="truncate">{s.name}</span>
+            </div>
           </button>
         ))}
       </div>
 
-      <button
-        data-testid="new-session-button"
-        onClick={onCreateSession}
-        className="m-2 px-3 py-1.5 text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 rounded transition-colors"
-      >
-        New Session
-      </button>
+      {/* New session button */}
+      <div className="p-3 border-t border-border-subtle">
+        <button
+          data-testid="new-session-button"
+          onClick={onCreateSession}
+          className="w-full px-4 py-2.5 text-sm font-medium bg-bg-hover hover:bg-bg-card
+                     text-text-secondary hover:text-text-primary
+                     rounded-lg border border-border-subtle hover:border-border-medium
+                     transition-all duration-300"
+        >
+          + New Session
+        </button>
+      </div>
     </div>
   )
 }
