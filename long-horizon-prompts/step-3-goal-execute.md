@@ -1,4 +1,4 @@
-/goal 逐轮执行 docs/plans 中的全部任务直到 bun run check_progress.ts 返回0。单线程串行开发，禁止 spawn 多 agent 或 workflow 并行写代码。每轮严格 TDD：① 读 progress.json 找第一个 pending 任务 ② 读对应 plan ③ 先写 plan 里列出的全部测试用例（至少5个）→ 运行确认 RED（全失败，跳过此步则测试无效）④ 实现功能 → 确认 GREEN（全过）⑤ 类型检查 gate 强制：bunx tsc --noEmit 必须零错误，失败必须修复到通过才能 commit ⑥ git commit -- task-N ⑦ 更新 progress.json（done, completed+1, rounds+1）。禁止 stub/echo/placeholder 假实现；涉及 Web 服务器的任务必须实际启动 + curl 验证真实回复；涉及 Web UI 的任务必须用 Playwright 打开浏览器验证页面渲染和交互（参考zszcode/long-horizon-prompts/step-3-goal-execute.md）。如果 check_progress.ts 返回0则停止，否则继续下一任务，完成一个plans文件（不是原子任务）进行git commit和push。
+/goal 逐轮执行 docs/plans 中的全部任务直到 bun run check_progress.ts 返回0。每轮严格 TDD：① 读 progress.json 找第一个 pending 任务 ② 读对应 plan ③ 先写 plan 里列出的全部测试用例（至少5个）→ 运行确认 RED（全失败，跳过此步则测试无效）④ 实现功能 → 确认 GREEN（全过）⑤ 类型检查 gate 强制：bunx tsc --noEmit 必须零错误，失败必须修复到通过才能 commit ⑥ git commit -- task-N ⑦ 更新 progress.json（done, completed+1, rounds+1）。禁止 stub/echo/placeholder 假实现；涉及 Web 服务器的任务必须实际启动 + curl 验证真实回复；涉及 Web UI 的任务必须用 Playwright 打开浏览器验证页面渲染和交互（参考zszcode/long-horizon-prompts/step-3-goal-execute.md）。如果 check_progress.ts 返回0则停止，否则继续下一任务，完成一个plans文件（不是原子任务）进行git commit和push。
 
 ## Playwright 验证规范
 

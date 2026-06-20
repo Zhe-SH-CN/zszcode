@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "bun:bundle": ["src/shims/bun-bundle.ts"],
+      "bun:test": ["src/shims/bun-test.ts"],
+      "@ant/claude-for-chrome-mcp": ["src/shims/ant-claude-for-chrome-mcp/index.ts"],
+      "react/compiler-runtime": ["src/shims/react-compiler-runtime/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist", "web"]
+}
