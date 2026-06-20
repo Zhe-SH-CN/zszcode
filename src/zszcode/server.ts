@@ -73,9 +73,12 @@ export function startWebServer(config: ZszCodeConfig): WebServerHandle {
             return new Response('WebSocket upgrade failed', { status: 500 })
           }
 
-          // Token auth for HTTP
+          // Token auth: required for root path, API, and WebSocket; not for static assets
           const reqToken = extractToken(url, req.headers)
-          if (reqToken !== token) {
+          const hasFileExtension = /\.\w+$/.test(url.pathname)
+          const isApiRoute = url.pathname.startsWith('/api/')
+
+          if (!hasFileExtension && reqToken !== token) {
             return new Response('Unauthorized', { status: 401 })
           }
 

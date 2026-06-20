@@ -2,7 +2,9 @@
   "name": "zszcode",
   "version": "0.1.0",
   "type": "module",
-  "bin": { "zszcode": "./dist/cli.js" },
+  "bin": {
+    "zszcode": "./dist/cli.js"
+  },
   "scripts": {
     "build": "bun build src/entrypoints/cli.tsx --outdir dist --target bun",
     "build:binary": "bun build --compile src/entrypoints/cli.tsx --outfile zszcode",
@@ -97,10 +99,11 @@
     "turndown": "^7"
   },
   "devDependencies": {
-    "@types/react": "^18",
-    "@types/ws": "^8",
+    "@playwright/test": "^1.61.0",
     "@types/express": "^4",
     "@types/lodash-es": "^4",
+    "@types/react": "^18",
+    "@types/ws": "^8",
     "typescript": "^5"
   }
 }
