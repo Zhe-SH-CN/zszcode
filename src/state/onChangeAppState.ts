@@ -18,6 +18,7 @@ import {
   type SessionExternalMetadata,
 } from '../utils/sessionState.js'
 import { updateSettingsForSource } from '../utils/settings/settings.js'
+import { eventBus } from '../zszcode/events.js'
 import type { AppState } from './AppStateStore.js'
 
 // Inverse of the push below — restore on worker restart.
@@ -65,6 +66,13 @@ export function onChangeAppState({
   const prevMode = oldState.toolPermissionContext.mode
   const newMode = newState.toolPermissionContext.mode
   if (prevMode !== newMode) {
+    eventBus.emit({
+      type: 'state_change',
+      timestamp: Date.now(),
+      field: 'toolPermissionContext.mode',
+      oldValue: prevMode,
+      newValue: newMode,
+    })
     // CCR external_metadata must not receive internal-only mode names
     // (bubble, ungated auto). Externalize first — and skip
     // the CCR notify if the EXTERNAL mode didn't change (e.g.,
@@ -96,6 +104,13 @@ export function onChangeAppState({
     newState.mainLoopModel !== oldState.mainLoopModel &&
     newState.mainLoopModel === null
   ) {
+    eventBus.emit({
+      type: 'state_change',
+      timestamp: Date.now(),
+      field: 'mainLoopModel',
+      oldValue: oldState.mainLoopModel,
+      newValue: null,
+    })
     // Remove from settings
     updateSettingsForSource('userSettings', { model: undefined })
     setMainLoopModelOverride(null)
@@ -113,6 +128,13 @@ export function onChangeAppState({
 
   // expandedView → persist as showExpandedTodos + showSpinnerTree for backwards compat
   if (newState.expandedView !== oldState.expandedView) {
+    eventBus.emit({
+      type: 'state_change',
+      timestamp: Date.now(),
+      field: 'expandedView',
+      oldValue: oldState.expandedView,
+      newValue: newState.expandedView,
+    })
     const showExpandedTodos = newState.expandedView === 'tasks'
     const showSpinnerTree = newState.expandedView === 'teammates'
     if (
@@ -132,6 +154,13 @@ export function onChangeAppState({
     newState.verbose !== oldState.verbose &&
     getGlobalConfig().verbose !== newState.verbose
   ) {
+    eventBus.emit({
+      type: 'state_change',
+      timestamp: Date.now(),
+      field: 'verbose',
+      oldValue: oldState.verbose,
+      newValue: newState.verbose,
+    })
     const verbose = newState.verbose
     saveGlobalConfig(current => ({
       ...current,
@@ -154,6 +183,13 @@ export function onChangeAppState({
   // settings: clear auth-related caches when settings change
   // This ensures apiKeyHelper and AWS/GCP credential changes take effect immediately
   if (newState.settings !== oldState.settings) {
+    eventBus.emit({
+      type: 'state_change',
+      timestamp: Date.now(),
+      field: 'settings',
+      oldValue: oldState.settings,
+      newValue: newState.settings,
+    })
     try {
       clearApiKeyHelperCache()
       clearAwsCredentialsCache()

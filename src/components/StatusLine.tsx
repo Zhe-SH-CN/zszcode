@@ -33,7 +33,7 @@ export function statusLineShouldDisplay(settings: ReadonlySettings): boolean {
   if (feature('KAIROS') && getKairosActive()) return false;
   return settings?.statusLine !== undefined;
 }
-function buildStatusLineCommandInput(permissionMode: PermissionMode, exceeds200kTokens: boolean, settings: ReadonlySettings, messages: Message[], addedDirs: string[], mainLoopModel: ModelName, vimMode?: VimMode): StatusLineCommandInput {
+function buildStatusLineCommandInput(permissionMode: PermissionMode, exceeds200kTokens: boolean, settings: ReadonlySettings, messages: Message[], addedDirs: string[], mainLoopModel: ModelName, vimMode?: VimMode, webUrl?: string): StatusLineCommandInput {
   const agentType = getMainThreadAgentType();
   const worktreeSession = getCurrentWorktreeSession();
   const runtimeModel = getRuntimeMainLoopModel({
@@ -122,6 +122,9 @@ function buildStatusLineCommandInput(permissionMode: PermissionMode, exceeds200k
         original_cwd: worktreeSession.originalCwd,
         original_branch: worktreeSession.originalBranch
       }
+    }),
+    ...(webUrl && {
+      web_url: webUrl
     })
   };
 }
@@ -131,6 +134,8 @@ type Props = {
   messagesRef: React.RefObject<Message[]>;
   lastAssistantMessageId: string | null;
   vimMode?: VimMode;
+  /** Optional web UI URL to display in the status bar */
+  webUrl?: string;
 };
 export function getLastAssistantMessageId(messages: Message[]): string | null {
   return getLastAssistantMessage(messages)?.uuid ?? null;
@@ -138,7 +143,8 @@ export function getLastAssistantMessageId(messages: Message[]): string | null {
 function StatusLineInner({
   messagesRef,
   lastAssistantMessageId,
-  vimMode
+  vimMode,
+  webUrl
 }: Props): React.ReactNode {
   const abortControllerRef = useRef<AbortController | undefined>(undefined);
   const permissionMode = useAppState(s => s.toolPermissionContext.mode);
@@ -206,7 +212,7 @@ function StatusLineInner({
         previousStateRef.current.messageId = currentMessageId;
         previousStateRef.current.exceeds200kTokens = exceeds200kTokens;
       }
-      const statusInput = buildStatusLineCommandInput(permissionModeRef.current, exceeds200kTokens, settingsRef.current, msgs, Array.from(addedDirsRef.current.keys()), mainLoopModelRef.current, vimModeRef.current);
+      const statusInput = buildStatusLineCommandInput(permissionModeRef.current, exceeds200kTokens, settingsRef.current, msgs, Array.from(addedDirsRef.current.keys()), mainLoopModelRef.current, vimModeRef.current, webUrl);
       const text = await executeStatusLineCommand(statusInput, controller.signal, undefined, logResult);
       if (!controller.signal.aborted) {
         setAppState(prev => {

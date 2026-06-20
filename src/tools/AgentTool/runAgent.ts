@@ -3,6 +3,7 @@ import type { UUID } from 'crypto'
 import { randomUUID } from 'crypto'
 import uniqBy from 'lodash-es/uniqBy.js'
 import { logForDebugging } from 'src/utils/debug.js'
+import { eventBus } from '../../zszcode/events.js'
 import { getProjectRoot, getSessionId } from '../../bootstrap/state.js'
 import { getCommand, getSkillToolCommands, hasCommand } from '../../commands.js'
 import {
@@ -345,6 +346,17 @@ export async function* runAgent({
   )
 
   const agentId = override?.agentId ? override.agentId : createAgentId()
+  const agentSpawnTime = Date.now()
+
+  // Emit agent_spawn event for observability
+  eventBus.emit({
+    type: 'agent_spawn',
+    timestamp: agentSpawnTime,
+    parentId: toolUseContext.agentId ?? getSessionId(),
+    childId: agentId,
+    agentType: agentDefinition.agentType,
+    description: description ?? agentDefinition.agentType,
+  })
 
   // Route this agent's transcript into a grouping subdirectory if requested
   // (e.g. workflow subagents write to subagents/workflows/<runId>/).
@@ -814,6 +826,13 @@ export async function* runAgent({
       agentDefinition.callback()
     }
   } finally {
+    // Emit agent_complete event for observability
+    eventBus.emit({
+      type: 'agent_complete',
+      timestamp: Date.now(),
+      agentId,
+      duration: Date.now() - agentSpawnTime,
+    })
     // Clean up agent-specific MCP servers (runs on normal completion, abort, or error)
     await mcpCleanup()
     // Clean up agent's session hooks

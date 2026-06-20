@@ -112,6 +112,7 @@ import {
 import { buildMcpToolName } from './mcpStringUtils.js'
 import { normalizeNameForMCP } from './normalization.js'
 import { getLoggingSafeMcpBaseUrl } from './utils.js'
+import { eventBus } from '../../zszcode/events.js'
 
 /* eslint-disable @typescript-eslint/no-require-imports */
 const fetchMcpSkillsForClient = feature('MCP_SKILLS')
@@ -1592,6 +1593,12 @@ export const connectToServer = memoize(
         wsIdeCount: serverStats?.wsIdeCount,
         ...mcpBaseUrlAnalytics(serverRef),
       })
+      eventBus.emit({
+        type: 'mcp_connect',
+        timestamp: Date.now(),
+        serverName: name,
+        success: true,
+      })
       return {
         name,
         client,
@@ -1629,6 +1636,12 @@ export const connectToServer = memoize(
       if (inProcessServer) {
         inProcessServer.close().catch(() => {})
       }
+      eventBus.emit({
+        type: 'mcp_connect',
+        timestamp: Date.now(),
+        serverName: name,
+        success: false,
+      })
       return {
         name,
         type: 'failed' as const,
@@ -3157,6 +3170,17 @@ async function callMCPTool({
 
     logMCPDebug(name, `Tool '${tool}' completed successfully in ${duration}`)
 
+    // Emit mcp_call event for observability
+    eventBus.emit({
+      type: 'mcp_call',
+      timestamp: Date.now(),
+      serverName: name,
+      toolName: tool,
+      request: args,
+      response: result,
+      duration: elapsed,
+    })
+
     // Log code indexing tool usage
     const codeIndexingTool = detectCodeIndexingFromMcpServerName(name)
     if (codeIndexingTool) {
@@ -3230,6 +3254,16 @@ async function callMCPTool({
         throw new McpSessionExpiredError(name)
       }
     }
+
+    // Emit mcp_call event for failed tool calls
+    eventBus.emit({
+      type: 'mcp_call',
+      timestamp: Date.now(),
+      serverName: name,
+      toolName: tool,
+      request: args,
+      duration: Date.now() - toolStartTime,
+    })
 
     // When the users hits esc, avoid logspew
     if (!(e instanceof Error) || e.name !== 'AbortError') {

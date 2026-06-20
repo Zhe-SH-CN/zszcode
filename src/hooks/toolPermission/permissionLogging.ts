@@ -16,6 +16,7 @@ import type {
   PermissionApprovalSource,
   PermissionRejectionSource,
 } from './PermissionContext.js'
+import { eventBus } from '../../zszcode/events.js'
 
 type PermissionLogContext = {
   tool: ToolType
@@ -231,6 +232,15 @@ function logPermissionDecision(
     decision,
     source: sourceString,
     tool_name: sanitizeToolNameForAnalytics(tool.name),
+  })
+
+  // Emit tool_permission_resolved event for observability
+  eventBus.emit({
+    type: 'tool_permission_resolved',
+    timestamp: Date.now(),
+    toolUseId: toolUseID,
+    decision,
+    source: sourceString,
   })
 }
 

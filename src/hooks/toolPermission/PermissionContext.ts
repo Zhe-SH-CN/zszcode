@@ -41,6 +41,7 @@ import {
   logPermissionDecision,
   type PermissionDecisionArgs,
 } from './permissionLogging.js'
+import { eventBus } from '../../zszcode/events.js'
 
 type PermissionApprovalSource =
   | { type: 'hook'; permanent?: boolean }
@@ -103,6 +104,15 @@ function createPermissionContext(
   queueOps?: PermissionQueueOps,
 ) {
   const messageId = assistantMessage.message.id
+
+  // Emit tool_permission_request event for observability
+  eventBus.emit({
+    type: 'tool_permission_request',
+    timestamp: Date.now(),
+    toolName: tool.name,
+    toolUseId: toolUseID,
+    input,
+  })
   const ctx = {
     tool,
     input,
