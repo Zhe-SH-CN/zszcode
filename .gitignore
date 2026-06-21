@@ -3,3 +3,8 @@ node_modules/zszcode
 node_modules/
 zszcode
 screenshots/
+dist/
+web/dist/
+*.log
+.env
+.env.*
