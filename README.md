@@ -30,7 +30,30 @@
 
 ## 快速开始
 
-### 方式一：从源码运行
+### 方式一：npm 安装（推荐）
+
+```bash
+# 全局安装
+npm install -g @zhe-sh-cn/zszcode
+
+# 运行
+zszcode
+
+# 或者 npx 直接运行
+npx @zhe-sh-cn/zszcode
+```
+
+### 方式二：bun 安装
+
+```bash
+# 全局安装
+bun add -g @zhe-sh-cn/zszcode
+
+# 运行
+zszcode
+```
+
+### 方式三：从源码运行
 
 ```bash
 # 克隆项目
@@ -48,17 +71,18 @@ bun run src/entrypoints/cli.tsx
 # http://localhost:3000?token=xxx
 ```
 
-### 方式二：编译二进制
+### 方式四：下载二进制
 
 ```bash
-# 构建前端
-cd web && bun run build && cd ..
+# 从 GitHub Releases 下载
+# https://github.com/Zhe-SH-CN/zszcode/releases
 
-# 编译独立二进制
-bun build --compile src/entrypoints/cli.tsx --outfile zszcode
-
-# 运行
+# Linux/macOS
+chmod +x zszcode
 ./zszcode
+
+# Windows
+zszcode.exe
 ```
 
 ## 配置说明

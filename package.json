@@ -1,9 +1,31 @@
 {
-  "name": "zszcode",
-  "version": "0.1.0",
+  "name": "@zhe-sh-cn/zszcode",
+  "version": "1.0.0",
+  "description": "AI coding assistant with Web UI observability - fork of Claude Code",
   "type": "module",
   "bin": {
     "zszcode": "./dist/cli.js"
+  },
+  "main": "./dist/cli.js",
+  "files": [
+    "dist/",
+    "web/dist/",
+    "README.md"
+  ],
+  "keywords": [
+    "ai",
+    "coding",
+    "assistant",
+    "claude",
+    "web-ui",
+    "observability"
+  ],
+  "author": "Zhe-SH-CN",
+  "license": "MIT",
+  "homepage": "https://github.com/Zhe-SH-CN/zszcode",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zhe-SH-CN/zszcode.git"
   },
   "aliases": {
     "react/compiler-runtime": "./src/shims/react-compiler-runtime/index.ts"
@@ -11,10 +33,12 @@
   "scripts": {
     "build": "bun build src/entrypoints/cli.tsx --outdir dist --target bun",
     "build:binary": "bun build --compile src/entrypoints/cli.tsx --outfile zszcode",
+    "build:all": "bun run build:web && bun run build",
     "dev": "bun run src/entrypoints/cli.tsx",
     "build:web": "cd web && bun run build",
     "test": "bun test",
-    "typecheck": "bunx tsc --noEmit"
+    "typecheck": "bunx tsc --noEmit",
+    "prepublishOnly": "bun run build:all"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "latest",
