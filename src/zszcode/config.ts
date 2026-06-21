@@ -13,8 +13,8 @@ export interface ZszCodeConfig {
 
 export const DEFAULTS: ZszCodeConfig = {
   model: 'mimo-v2.5-pro',
-  baseUrl: 'https://token-plan-cn.xiaomimimo.com/anthropic',
-  apiKey: 'tp-c2vyjcx7y4xxzfs6s8sz8htsw7ou3ts2afdulks4mcc0iecy',
+  baseUrl: '',
+  apiKey: '',
   webPort: 3000,
   autoOpenBrowser: false,
   permissionMode: 'confirm',
