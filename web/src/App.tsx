@@ -103,11 +103,11 @@ function eventsToMessages(events: ZszCodeEvent[]): ChatMessage[] {
         messages.push({
           type: 'result',
           data: {
-            duration: 0,
-            inputTokens: 0,
-            outputTokens: 0,
-            cost: 0,
-            stopReason: 'end_turn',
+            duration: ev.duration || 0,
+            inputTokens: ev.inputTokens || 0,
+            outputTokens: ev.outputTokens || 0,
+            cost: ev.cost || 0,
+            stopReason: ev.stopReason || 'end_turn',
           },
         })
         break
@@ -174,13 +174,30 @@ export const App: React.FC = () => {
     sendMessage({ type: 'send', sessionId: activeSessionId, content })
   }
 
+  // Calculate token usage from events
+  const tokenUsage = React.useMemo(() => {
+    let inputTokens = 0
+    let outputTokens = 0
+    for (const ev of events) {
+      if (ev.type === 'api_stream_end') {
+        inputTokens += ev.tokens || 0
+      }
+    }
+    return { inputTokens, outputTokens, total: inputTokens + outputTokens }
+  }, [events])
+
+  // Calculate cost (assuming $0.003 per 1K tokens for mimo-v2.5-pro)
+  const cost = React.useMemo(() => {
+    return (tokenUsage.total / 1000) * 0.003
+  }, [tokenUsage])
+
   return (
     <div data-testid="app" className="h-screen flex flex-col bg-bg-primary text-text-primary">
       {/* Top bar */}
       <ContextGauge
-        tokenCount={0}
+        tokenCount={tokenUsage.total}
         maxTokens={200000}
-        cost={0}
+        cost={cost}
         model={DEFAULT_MODEL}
         agentStatus={connected ? 'idle' : 'idle'}
       />

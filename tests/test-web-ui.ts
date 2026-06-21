@@ -31,7 +31,7 @@ async function testWebUI() {
         eventBus.emit({ type: 'api_stream_start', timestamp: Date.now(), model: 'mimo-v2.5-pro' })
         eventBus.emit({ type: 'message', timestamp: Date.now(), role: 'assistant', content: 'I can help you write a Python function! Here\'s a simple example:\n\n```python\ndef greet(name):\n    return f"Hello, {name}!"\n```\n\nThis function takes a name parameter and returns a greeting string.' })
         eventBus.emit({ type: 'api_stream_end', timestamp: Date.now(), duration: 1500, tokens: 150 })
-        eventBus.emit({ type: 'turn_end', timestamp: Date.now(), turnNumber: 1 })
+        eventBus.emit({ type: 'turn_end', timestamp: Date.now(), turnNumber: 1, duration: 1500, inputTokens: 150, outputTokens: 200, cost: 0.001, stopReason: 'end_turn' })
       }, 1000)
     }
   })

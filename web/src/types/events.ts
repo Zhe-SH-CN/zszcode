@@ -144,6 +144,11 @@ export interface TurnStartEvent extends BaseEvent {
 export interface TurnEndEvent extends BaseEvent {
   type: 'turn_end'
   turnNumber: number
+  duration?: number
+  inputTokens?: number
+  outputTokens?: number
+  cost?: number
+  stopReason?: string
 }
 
 export type ZszCodeEvent =
