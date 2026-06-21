@@ -1,6 +1,12 @@
-import { c as _c } from "react/compiler-runtime";
 import { feature } from 'bun:bundle';
-import React, { useContext, useEffect, useEffectEvent, useState, useSyncExternalStore } from 'react';
+import React, { useContext, useEffect, useState, useSyncExternalStore } from 'react';
+
+// Polyfill for React 19's useEffectEvent
+const useEffectEvent = <T extends Function>(fn: T): T => {
+  const ref = React.useRef(fn)
+  ref.current = fn
+  return React.useCallback((...args: any[]) => ref.current(...args), []) as T
+}
 import { MailboxProvider } from '../context/mailbox.js';
 import { useSettingsChange } from '../hooks/useSettingsChange.js';
 import { logForDebugging } from '../utils/debug.js';
