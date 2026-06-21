@@ -34,11 +34,11 @@ export const ToolResultBlock: React.FC<ToolResultBlockProps> = ({
   return (
     <div
       data-testid={`tool-result-block${success ? '-success' : '-failed'}`}
-      className={`glass-card border-l-4 ${borderClass} ${bgClass} overflow-hidden`}
+      className={`glass-card border-l-2 ${borderClass} ${bgClass} overflow-hidden`}
     >
       <div className="px-4 py-3 flex items-center gap-3">
         <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-          success ? 'bg-accent-emerald/20' : 'bg-accent-rose/20'
+          success ? 'bg-accent-emerald/15' : 'bg-accent-rose/15'
         }`}>
           <div className={textClass}>{icon}</div>
         </div>

@@ -3,34 +3,35 @@
 @tailwind utilities;
 
 /* Import fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* Base styles */
 @layer base {
   :root {
-    --bg-gradient-start: #0a0e1a;
-    --bg-gradient-end: #0f1629;
+    --bg-gradient-start: #080b14;
+    --bg-gradient-end: #0d1117;
+    --accent-gradient: linear-gradient(135deg, #58a6ff, #bc8cff);
   }
 
   body {
     @apply bg-bg-primary text-text-primary antialiased;
-    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
     min-height: 100vh;
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   }
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-bg-secondary;
+    @apply bg-transparent;
   }
 
   ::-webkit-scrollbar-thumb {
     @apply bg-text-muted rounded-full;
-    border: 2px solid transparent;
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -42,8 +43,8 @@
 @layer components {
   /* Glass morphism card */
   .glass-card {
-    @apply bg-bg-card/80 backdrop-blur-xl border border-border-subtle rounded-xl;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    @apply bg-bg-card/80 backdrop-blur-xl rounded-xl;
+    border: 1px solid rgba(139, 148, 158, 0.08);
   }
 
   /* Glow effect on hover */
@@ -52,18 +53,18 @@
   }
 
   .glow-on-hover:hover {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 25px rgba(188, 140, 255, 0.2);
+    border-color: rgba(188, 140, 255, 0.3);
   }
 
   /* Status indicator */
   .status-dot {
-    @apply w-2.5 h-2.5 rounded-full;
+    @apply w-2 h-2 rounded-full;
   }
 
   .status-dot.active {
     @apply bg-accent-emerald;
-    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    box-shadow: 0 0 8px rgba(63, 185, 80, 0.6);
     animation: pulse 2s infinite;
   }
 
@@ -73,13 +74,13 @@
 
   .status-dot.error {
     @apply bg-accent-rose;
-    box-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
+    box-shadow: 0 0 8px rgba(248, 81, 73, 0.6);
   }
 
   /* Event card */
   .event-card {
     @apply glass-card p-4 animate-slide-in;
-    border-left: 3px solid transparent;
+    border-left: 2px solid transparent;
   }
 
   .event-card.tool-call {
@@ -96,11 +97,15 @@
 
   /* Button styles */
   .btn-primary {
-    @apply px-4 py-2 bg-gradient-to-r from-accent-blue to-accent-purple
-           text-white font-medium rounded-lg
-           transition-all duration-300
-           hover:shadow-glow-blue hover:scale-[1.02]
-           active:scale-[0.98];
+    @apply px-4 py-2 text-white font-medium rounded-lg
+           transition-all duration-300;
+    background: var(--accent-gradient);
+    box-shadow: 0 2px 10px rgba(88, 166, 255, 0.3);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 4px 20px rgba(88, 166, 255, 0.5);
+    transform: translateY(-1px);
   }
 
   .btn-secondary {
@@ -122,7 +127,7 @@
            border border-border-subtle rounded-xl
            transition-all duration-300
            placeholder:text-text-muted
-           focus:outline-none focus:border-accent-blue focus:ring-2 focus:ring-accent-blue/20;
+           focus:outline-none focus:border-accent-purple focus:ring-2 focus:ring-accent-purple/20;
   }
 
   /* Tab styles */
@@ -134,7 +139,8 @@
 
   .tab-item.active {
     @apply bg-bg-card text-text-primary;
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 15px rgba(188, 140, 255, 0.15);
+    border: 1px solid rgba(188, 140, 255, 0.2);
   }
 
   /* Tree node */
@@ -144,12 +150,6 @@
 
   .tree-node.root {
     @apply ml-0;
-  }
-
-  /* Checkbox */
-  .checkbox {
-    @apply w-4 h-4 rounded border-border-medium text-accent-blue
-           focus:ring-accent-blue/20 focus:ring-2;
   }
 
   /* Code block */
@@ -171,10 +171,10 @@
 
 @keyframes glow-pulse {
   0%, 100% {
-    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 5px rgba(188, 140, 255, 0.5);
   }
   50% {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+    box-shadow: 0 0 25px rgba(188, 140, 255, 0.8);
   }
 }
 
@@ -194,25 +194,7 @@
 /* Utility classes */
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-blue to-accent-purple;
-  }
-
-  .border-gradient {
-    border: 1px solid transparent;
-    background-clip: padding-box;
-    position: relative;
-  }
-
-  .border-gradient::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, theme('colors.accent.blue'), theme('colors.accent.purple'));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
+    @apply bg-clip-text text-transparent;
+    background: var(--accent-gradient);
   }
 }

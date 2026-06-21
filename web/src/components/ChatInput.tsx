@@ -17,7 +17,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     const el = textareaRef.current
     if (el) {
       el.style.height = 'auto'
-      el.style.height = `${Math.min(el.scrollHeight, 240)}px` // ~10 lines
+      el.style.height = `${Math.min(el.scrollHeight, 240)}px`
     }
   }, [text])
 
@@ -38,7 +38,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   return (
     <div
       data-testid="chat-input-container"
-      className="border-t border-border-subtle bg-bg-secondary/80 backdrop-blur-sm p-4"
+      className="border-t border-border-subtle bg-bg-secondary/60 backdrop-blur-sm p-4"
     >
       {disabled ? (
         <div className="flex items-center gap-3 px-4 py-3">
@@ -59,11 +59,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({
               className="w-full px-4 py-3 bg-bg-card text-text-primary
                          border border-border-subtle rounded-xl
                          resize-none focus:outline-none
-                         focus:border-accent-blue focus:ring-2 focus:ring-accent-blue/20
+                         focus:border-accent-purple focus:ring-2 focus:ring-accent-purple/20
                          placeholder:text-text-muted
                          transition-all duration-300"
             />
-            <div className="absolute right-3 bottom-3 text-xs text-text-muted">
+            <div className="absolute right-3 bottom-3 text-xs text-text-muted font-mono">
               {text.length > 0 && <span>{text.length}</span>}
             </div>
           </div>
@@ -71,12 +71,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             data-testid="send-button"
             onClick={handleSend}
             disabled={disabled || !text.trim()}
-            className="px-6 py-3 bg-gradient-to-r from-accent-blue to-accent-purple
-                       text-white font-medium rounded-xl
+            className="px-6 py-3 text-white font-medium rounded-xl
                        transition-all duration-300
-                       hover:shadow-glow-blue hover:scale-[1.02]
+                       hover:shadow-glow hover:scale-[1.02]
                        active:scale-[0.98]
                        disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            style={{ background: 'var(--accent-gradient)' }}
           >
             Send
           </button>

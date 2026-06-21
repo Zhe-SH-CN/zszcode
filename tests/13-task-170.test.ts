@@ -25,7 +25,7 @@ describe('task 170-171: ToolUseBlock component', () => {
   })
 
   test('has blue left border', () => {
-    expect(content).toContain('border-l-4 border-accent-blue')
+    expect(content).toContain('border-l-2 border-accent-blue')
   })
 
   test('input collapsible', () => {

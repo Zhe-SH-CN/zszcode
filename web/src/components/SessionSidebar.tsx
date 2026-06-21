@@ -17,7 +17,7 @@ export const SessionSidebar: React.FC<SessionSidebarProps> = ({
   return (
     <div
       data-testid="session-sidebar"
-      className="w-64 flex-shrink-0 bg-bg-secondary/50 border-r border-border-subtle flex flex-col h-full backdrop-blur-sm"
+      className="w-64 flex-shrink-0 bg-bg-secondary/40 border-r border-border-subtle flex flex-col h-full"
     >
       {/* Header */}
       <div className="p-4 border-b border-border-subtle">
@@ -41,13 +41,13 @@ export const SessionSidebar: React.FC<SessionSidebarProps> = ({
             }}
             className={`w-full text-left px-3 py-2.5 text-sm rounded-lg transition-all duration-200 ${
               s.id === activeSessionId
-                ? 'bg-accent-blue/20 text-text-primary border border-accent-blue/30'
+                ? 'bg-accent-purple/15 text-text-primary border border-accent-purple/30'
                 : 'text-text-secondary hover:bg-bg-hover hover:text-text-primary border border-transparent'
             }`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <div className={`w-2 h-2 rounded-full ${
-                s.id === activeSessionId ? 'bg-accent-blue' : 'bg-text-muted'
+                s.id === activeSessionId ? 'bg-accent-purple' : 'bg-text-muted'
               }`} />
               <span className="truncate">{s.name}</span>
             </div>
@@ -60,7 +60,8 @@ export const SessionSidebar: React.FC<SessionSidebarProps> = ({
         <button
           data-testid="new-session-button"
           onClick={onCreateSession}
-          className="w-full px-4 py-2.5 text-sm font-medium bg-bg-hover hover:bg-bg-card
+          className="w-full px-4 py-2.5 text-sm font-medium
+                     bg-bg-hover hover:bg-bg-card
                      text-text-secondary hover:text-text-primary
                      rounded-lg border border-border-subtle hover:border-border-medium
                      transition-all duration-300"

@@ -17,9 +17,9 @@ describe('task 163: Tailwind dark theme config', () => {
 
   test('has custom bg colors', () => {
     const content = readFileSync(join(WEB, 'tailwind.config.js'), 'utf-8')
-    expect(content).toContain('bg')
+    expect(content).toContain('bg') || expect(content).toContain('primary')
     expect(content).toContain('primary')
-    expect(content).toContain('#0a0e1a')
+    expect(content).toContain('#080b14')
   })
 
   test('index.css has Tailwind directives', () => {

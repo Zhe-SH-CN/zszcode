@@ -10,6 +10,9 @@ import { useWebSocket } from './hooks/useWebSocket'
 import { useSession } from './hooks/useSession'
 import type { ChatMessage, AgentNode, ToolCallInfo, ZszCodeEvent } from './types/events'
 
+// Default model from config
+const DEFAULT_MODEL = 'mimo-v2.5-pro'
+
 type Tab = 'chat' | 'workflow' | 'signals'
 
 /** Build a simple agent tree from events for the workflow view */
@@ -178,7 +181,7 @@ export const App: React.FC = () => {
         tokenCount={0}
         maxTokens={200000}
         cost={0}
-        model="claude-sonnet-4-20250514"
+        model={DEFAULT_MODEL}
         agentStatus={connected ? 'idle' : 'idle'}
       />
 
