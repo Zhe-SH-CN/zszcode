@@ -5,6 +5,9 @@
   "bin": {
     "zszcode": "./dist/cli.js"
   },
+  "aliases": {
+    "react/compiler-runtime": "./src/shims/react-compiler-runtime/index.ts"
+  },
   "scripts": {
     "build": "bun build src/entrypoints/cli.tsx --outdir dist --target bun",
     "build:binary": "bun build --compile src/entrypoints/cli.tsx --outfile zszcode",

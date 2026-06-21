@@ -5,3 +5,8 @@ export function c(size: number) {
   // For external builds without the compiler, we return a simple array-based cache.
   return new Array(size).fill(undefined)
 }
+
+// Also export use hook polyfill for React 18
+export const use = (promise: Promise<any>) => {
+  throw new Error('use() hook requires React 19')
+}

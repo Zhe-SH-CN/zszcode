@@ -1,7 +1,10 @@
-import { c as _c } from "react/compiler-runtime";
 import * as React from 'react';
-import { use } from 'react';
 import { Box } from '../ink.js';
+
+// Polyfill for React 19's use hook (not available in React 18)
+const use = React.use || ((promise: Promise<any>) => {
+  throw new Error('use() hook requires React 19')
+})
 import type { AgentDefinitionsResult } from '../tools/AgentTool/loadAgentsDir.js';
 import { getMemoryFiles } from '../utils/claudemd.js';
 import { getGlobalConfig } from '../utils/config.js';

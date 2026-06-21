@@ -1,8 +1,11 @@
-import { c as _c } from "react/compiler-runtime";
 import figures from 'figures';
 import * as React from 'react';
-import { Suspense, use } from 'react';
 import { getSessionId } from '../../bootstrap/state.js';
+
+// Polyfill for React 19's use hook
+const use = React.use || ((promise: Promise<any>) => {
+  throw new Error('use() hook requires React 19')
+})
 import type { LocalJSXCommandContext } from '../../commands.js';
 import { useIsInsideModal } from '../../context/modalContext.js';
 import { Box, Text, useTheme } from '../../ink.js';
