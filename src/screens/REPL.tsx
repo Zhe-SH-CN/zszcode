@@ -144,6 +144,7 @@ import { useMailboxBridge } from '../hooks/useMailboxBridge.js';
 import { queryCheckpoint, logQueryProfileReport } from '../utils/queryProfiler.js';
 import type { Message as MessageType, UserMessage, ProgressMessage, HookResultMessage, PartialCompactDirection } from '../types/message.js';
 import { query } from '../query.js';
+import { eventBus } from '../zszcode/events.js';
 import { mergeClients, useMergedClients } from '../hooks/useMergedClients.js';
 import { getQuerySourceForREPL } from '../utils/promptCategory.js';
 import { useMergedTools } from '../hooks/useMergedTools.js';
@@ -862,6 +863,27 @@ export function REPL({
       }
     }
   }, [streamingThinking]);
+
+  // Listen for messages from Web UI via eventBus
+  useEffect(() => {
+    const checkWebMessages = setInterval(() => {
+      const webMsg = eventBus.dequeueMessage()
+      if (webMsg && !isLoading) {
+        // Process the Web UI message as user input
+        const userMessage: UserMessage = {
+          type: 'user',
+          uuid: randomUUID(),
+          message: { role: 'user', content: webMsg },
+          sessionId: randomUUID(),
+        }
+        setMessages(prev => [...prev, userMessage])
+        const newAbortController = new AbortController()
+        setAbortController(newAbortController)
+        void onQuery([userMessage], newAbortController, true, [], mainLoopModel)
+      }
+    }, 100) // Check every 100ms
+    return () => clearInterval(checkWebMessages)
+  }, [isLoading, mainLoopModel])
   const [abortController, setAbortController] = useState<AbortController | null>(null);
   // Ref that always points to the current abort controller, used by the
   // REPL bridge to abort the active query when a remote interrupt arrives.
